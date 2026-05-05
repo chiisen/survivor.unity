@@ -83,9 +83,9 @@ namespace SurvivorUnity.Core
             {
                 controller.Initialize(
                     GameManager.Instance.Player.transform.position,
-                    speed: 50f,
-                    hp: 1,
-                    damage: 10
+                    moveSpeed: 50f,
+                    health: 1,
+                    attackDamage: 10
                 );
             }
             

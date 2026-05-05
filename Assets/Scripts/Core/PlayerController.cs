@@ -135,6 +135,7 @@ namespace SurvivorUnity.Core
         public int MaxHP => maxHP;
         public int CurrentHP => currentHP;
         public float Speed => speed;
+        public int PickupRange => pickupRange;
         public float AttackRange => attackRange;
         public int Damage => damage;
         public int Level => level;
