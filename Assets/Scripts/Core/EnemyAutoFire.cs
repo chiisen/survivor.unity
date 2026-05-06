@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Survivor.Core
+namespace SurvivorUnity.Core
 {
     public class EnemyAutoFire : MonoBehaviour
     {
@@ -9,6 +9,8 @@ namespace Survivor.Core
         private GameObject projectilePrefab;
         private Transform playerTransform;
         private float lastAttackTime;
+        private float projectileSpeed = 5f;
+        private int projectileDamage = 5;
 
         public void Initialize(float range, float interval, GameObject prefab)
         {
@@ -36,13 +38,12 @@ namespace Survivor.Core
         {
             Vector2 direction = (playerTransform.position - transform.position).normalized;
 
-            var projectile = Survivor.Systems.ProjectilePool.Instance.Spawn(transform.position);
-
-            var projectileController = projectile.GetComponent<Survivor.Core.ProjectileController>();
-            if (projectileController != null)
-            {
-                projectileController.SetDirection(direction);
-            }
+            ProjectilePool.Instance.SpawnProjectile(
+                transform.position,
+                direction,
+                projectileSpeed,
+                projectileDamage
+            );
         }
     }
 }

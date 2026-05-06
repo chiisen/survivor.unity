@@ -16,8 +16,8 @@ namespace SurvivorUnity.Core
         [SerializeField] private GameObject player;
         
         [Header("Phase 2.1: Enemy Pool Manager")]
-        [SerializeField] private EnemyPoolManager enemyPoolManager;
-        [SerializeField] private bool usePoolManager = false;
+        public EnemyPoolManager enemyPoolManager;
+        public bool usePoolManager = false;
 
         [Header("Enemy Management")]
         [SerializeField] private List<GameObject> enemies = new List<GameObject>();

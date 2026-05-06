@@ -71,7 +71,7 @@ namespace SurvivorUnity.Core
                 float distance = Vector2.Distance(transform.position, GameManager.Instance.Player.transform.position);
                 if (distance <= config.attackRange)
                 {
-                    rb.velocity = Vector2.zero;
+                    rb.linearVelocity = Vector2.zero;
                     return;
                 }
             }

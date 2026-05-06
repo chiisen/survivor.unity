@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Survivor.Config;
-using Survivor.Core;
+using SurvivorUnity.Core;
 
 namespace Survivor.Systems
 {
@@ -72,7 +72,7 @@ namespace Survivor.Systems
             if (controller != null)
             {
                 var pool = pools[controller.enemyType];
-                pool.Return(enemy);
+                pool.ReturnEnemy(enemy);
             }
         }
 

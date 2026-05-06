@@ -11,8 +11,8 @@ namespace SurvivorUnity.Core
         public EnemyType enemyType;
         
         [Header("Pool Settings")]
-        [SerializeField] private GameObject enemyPrefab;
-        [SerializeField] private int initialPoolSize = 30;
+        public GameObject enemyPrefab;
+        public int initialPoolSize = 30;
         [SerializeField] private int maxPoolSize = 100;
         
         [Header("Spawn Settings")]
