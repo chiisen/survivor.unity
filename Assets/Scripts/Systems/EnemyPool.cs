@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Survivor.Config;
 
 namespace SurvivorUnity.Core
 {
     public class EnemyPool : MonoBehaviour
     {
         public static EnemyPool Instance { get; private set; }
+        
+        public EnemyType enemyType;
         
         [Header("Pool Settings")]
         [SerializeField] private GameObject enemyPrefab;
@@ -104,6 +107,22 @@ namespace SurvivorUnity.Core
             );
             
             return playerPos + offset;
+        }
+        
+        public GameObject Spawn(Vector3 position)
+        {
+            GameObject enemy = GetFromPool();
+            if (enemy == null)
+            {
+                enemy = Instantiate(enemyPrefab);
+                enemy.transform.SetParent(transform);
+            }
+            
+            enemy.SetActive(true);
+            enemy.transform.position = position;
+            
+            activeEnemies.Add(enemy);
+            return enemy;
         }
         
         public void ReturnEnemy(GameObject enemy)

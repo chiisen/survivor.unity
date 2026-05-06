@@ -1,9 +1,14 @@
 using UnityEngine;
+using Survivor.Config;
+using Survivor.Systems;
 
 namespace SurvivorUnity.Core
 {
     public class EnemyController : MonoBehaviour
     {
+        public EnemyType enemyType;
+        
+        private EnemyTypeConfig config;
         private Vector2 targetPosition;
         private float speed;
         private int hp;
@@ -28,11 +33,49 @@ namespace SurvivorUnity.Core
             damage = attackDamage;
         }
         
+        public void Initialize(EnemyTypeConfig config)
+        {
+            this.config = config;
+            enemyType = config.enemyType;
+            hp = config.maxHealth;
+            speed = config.moveSpeed;
+            
+            ApplyTypeSpecificSettings();
+        }
+        
+        private void ApplyTypeSpecificSettings()
+        {
+            if (enemyType == EnemyType.Tank)
+            {
+                GetComponent<CircleCollider2D>().radius = 0.8f;
+            }
+            
+            if (enemyType == EnemyType.Ranged)
+            {
+                var autoFire = GetComponent<EnemyAutoFire>();
+                if (autoFire != null)
+                {
+                    autoFire.Initialize(config.attackRange, config.attackInterval, config.projectilePrefab);
+                }
+            }
+        }
+        
         private void MoveTowardsPlayer()
         {
             if (GameManager.Instance == null || GameManager.Instance.Player == null) return;
             
             Vector2 direction = (GameManager.Instance.Player.transform.position - transform.position).normalized;
+            
+            if (enemyType == EnemyType.Ranged && config != null)
+            {
+                float distance = Vector2.Distance(transform.position, GameManager.Instance.Player.transform.position);
+                if (distance <= config.attackRange)
+                {
+                    rb.velocity = Vector2.zero;
+                    return;
+                }
+            }
+            
             rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
         }
         
@@ -49,10 +92,15 @@ namespace SurvivorUnity.Core
         {
             if (ExpOrbPool.Instance != null)
             {
-                ExpOrbPool.Instance.SpawnExpOrb(transform.position, expValue: 10);
+                int expValue = config != null ? config.expValue : 10;
+                ExpOrbPool.Instance.SpawnExpOrb(transform.position, expValue);
             }
             
-            if (EnemyPool.Instance != null)
+            if (EnemyPoolManager.Instance != null)
+            {
+                EnemyPoolManager.Instance.ReturnEnemy(gameObject);
+            }
+            else if (EnemyPool.Instance != null)
             {
                 EnemyPool.Instance.ReturnEnemy(gameObject);
             }

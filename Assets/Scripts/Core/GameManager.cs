@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Survivor.Systems;
 
 namespace SurvivorUnity.Core
 {
@@ -13,6 +14,10 @@ namespace SurvivorUnity.Core
 
         [Header("Player Reference")]
         [SerializeField] private GameObject player;
+        
+        [Header("Phase 2.1: Enemy Pool Manager")]
+        [SerializeField] private EnemyPoolManager enemyPoolManager;
+        [SerializeField] private bool usePoolManager = false;
 
         [Header("Enemy Management")]
         [SerializeField] private List<GameObject> enemies = new List<GameObject>();
@@ -62,6 +67,10 @@ namespace SurvivorUnity.Core
 
         private void UpdatePhase1()
         {
+            if (usePoolManager && enemyPoolManager != null)
+            {
+                enemyPoolManager.SpawnEnemy(gameTime);
+            }
         }
 
         private void UpdatePhase2()
