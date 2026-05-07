@@ -87,9 +87,7 @@ upgrade_log.txt
 .opencode/
 
 # MCP Server
-/unity-mcp-server-win-x64/win-x64/logs/*
-/unity-mcp-server-win-x64/win-x64/aspnetcorev2_inprocess.dll
-/unity-mcp-server-win-x64/win-x64/unity-mcp-server.exe
+/unity-mcp-server-win-x64/
 
 # Unity MCP Server NuGet packages (可透過 package manager 重新安裝)
 Assets/Plugins/NuGet/
