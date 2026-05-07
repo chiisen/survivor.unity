@@ -83,10 +83,16 @@ upgrade_log.txt
 
 .python-version
 
+# AI Agent 工具配置（開發者本機環境）
+.opencode/
+
 # MCP Server
 /unity-mcp-server-win-x64/win-x64/logs/*
 /unity-mcp-server-win-x64/win-x64/aspnetcorev2_inprocess.dll
 /unity-mcp-server-win-x64/win-x64/unity-mcp-server.exe
+
+# Unity MCP Server NuGet packages (可透過 package manager 重新安裝)
+Assets/Plugins/NuGet/
 
 # Test scripts and results
 test-*.ps1
