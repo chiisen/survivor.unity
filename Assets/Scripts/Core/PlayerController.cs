@@ -7,7 +7,7 @@ namespace SurvivorUnity.Core
         [Header("Player Stats")]
         [SerializeField] private int maxHP = 100;
         [SerializeField] private int currentHP = 100;
-        [SerializeField] private float speed = 200f;
+        [SerializeField] private float speed = 5f;
         [SerializeField] private int pickupRange = 80;
         [SerializeField] private float attackRange = 300f;
         [SerializeField] private float fireRate = 0.5f;
@@ -53,10 +53,11 @@ namespace SurvivorUnity.Core
             movement.x = Input.GetAxisRaw("Horizontal");
             movement.y = Input.GetAxisRaw("Vertical");
 
-            if (movement != Vector2.zero)
-            {
-                UpdateDirection();
-            }
+            // 移除旋转逻辑 - 主角保持固定朝向
+            // if (movement != Vector2.zero)
+            // {
+            //     UpdateDirection();
+            // }
         }
 
         private void Move()

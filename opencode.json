@@ -9,11 +9,6 @@
         "@modelcontextprotocol/server-everything"
       ],
       "enabled": true
-    },
-    "ai-game-developer": {
-      "enabled": true,
-      "type": "remote",
-      "url": "http://localhost:24358"
     }
   }
 }
