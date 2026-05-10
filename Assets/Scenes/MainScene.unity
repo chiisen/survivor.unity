@@ -4381,7 +4381,7 @@ MonoBehaviour:
   spawnDistance: 8
   maxEnemies: 50
   normalSpeed: 2
-  normalHP: 10
+  normalHP: 3
   normalDamage: 10
   normalExpValue: 5
 --- !u!4 &1923435604
