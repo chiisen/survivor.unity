@@ -177,7 +177,7 @@ namespace SurvivorUnity.Core
         {
             hpBar = new GameObject("HPBar");
             hpBar.transform.SetParent(transform, false);
-            hpBar.transform.localPosition = new Vector3(0, 0.15f, 0);
+            hpBar.transform.localPosition = new Vector3(0, 0.3f, 0);
             hpBar.transform.localScale = new Vector3(0.5f, 0.08f, 1f);
             
             hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
