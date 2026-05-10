@@ -1,6 +1,8 @@
 using UnityEngine;
 using Survivor.Config;
 using Survivor.Systems;
+using System.Collections;
+using System.Collections;
 
 namespace SurvivorUnity.Core
 {
@@ -12,12 +14,16 @@ namespace SurvivorUnity.Core
         private Vector2 targetPosition;
         private float speed;
         private int hp;
+        private int maxHP;
         private int damage;
         private Rigidbody2D rb;
+        private GameObject hpBar;
+        private SpriteRenderer hpBarRenderer;
         
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            CreateHPBar();
         }
         
         private void FixedUpdate()
@@ -30,7 +36,9 @@ namespace SurvivorUnity.Core
             targetPosition = target;
             speed = moveSpeed;
             hp = health;
+            maxHP = health;
             damage = attackDamage;
+            UpdateHPBar();
         }
         
         public void Initialize(EnemyTypeConfig config)
@@ -38,9 +46,11 @@ namespace SurvivorUnity.Core
             this.config = config;
             enemyType = config.enemyType;
             hp = config.maxHealth;
+            maxHP = config.maxHealth;
             speed = config.moveSpeed;
             
             ApplyTypeSpecificSettings();
+            UpdateHPBar();
         }
         
         private void ApplyTypeSpecificSettings()
@@ -83,6 +93,8 @@ namespace SurvivorUnity.Core
         public void TakeDamage(int amount)
         {
             hp -= amount;
+            
+            UpdateHPBar();
             
             StartCoroutine(FlashRed());
             
@@ -158,6 +170,56 @@ namespace SurvivorUnity.Core
                 {
                     player.TakeDamage(damage);
                 }
+            }
+        }
+        
+        private void CreateHPBar()
+        {
+            hpBar = new GameObject("HPBar");
+            hpBar.transform.SetParent(transform);
+            hpBar.transform.localPosition = new Vector3(0, 0.8f, 0);
+            hpBar.transform.localScale = new Vector3(0.5f, 0.1f, 1f);
+            
+            hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
+            
+            Sprite circleSprite = Sprite.Create(
+                Texture2D.whiteTexture,
+                new Rect(0, 0, 1, 1),
+                new Vector2(0.5f, 0.5f)
+            );
+            
+            hpBarRenderer.sprite = circleSprite;
+            hpBarRenderer.color = Color.red;
+            hpBarRenderer.sortingOrder = 30;
+        }
+        
+        private void UpdateHPBar()
+        {
+            if (hpBar != null && maxHP > 0)
+            {
+                float hpPercent = (float)hp / maxHP;
+                hpBar.transform.localScale = new Vector3(0.5f * hpPercent, 0.1f, 1f);
+                
+                if (hpPercent <= 0.3f)
+                {
+                    hpBarRenderer.color = new Color(1f, 0f, 0f); // 红色
+                }
+                else if (hpPercent <= 0.6f)
+                {
+                    hpBarRenderer.color = new Color(1f, 0.5f, 0f); // 橙色
+                }
+                else
+                {
+                    hpBarRenderer.color = new Color(0f, 1f, 0f); // 绿色
+                }
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            if (hpBar != null)
+            {
+                Destroy(hpBar);
             }
         }
     }
