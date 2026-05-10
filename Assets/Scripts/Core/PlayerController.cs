@@ -12,7 +12,7 @@ namespace SurvivorUnity.Core
         [SerializeField] private float attackRange = 300f;
         [SerializeField] private float fireRate = 0.5f;
         [SerializeField] private int damage = 1;
-        [SerializeField] private float projectileSpeed = 20f;
+        [SerializeField] private float projectileSpeed = 8f;
         [SerializeField] private int projectileCount = 3;
 
         [Header("Player State")]
@@ -102,44 +102,65 @@ namespace SurvivorUnity.Core
             
             if (Time.time >= nextFireTime)
             {
-                Debug.Log($"[PlayerController.AutoFire] Time to fire! Time.time={Time.time}, nextFireTime={nextFireTime}");
-                FireProjectile();
-                nextFireTime = Time.time + autoFireInterval;
+                GameObject nearestEnemy = FindNearestEnemy();
+                if (nearestEnemy != null)
+                {
+                    FireProjectile(nearestEnemy.transform.position);
+                    nextFireTime = Time.time + autoFireInterval;
+                }
             }
         }
         
-        private void FireProjectile()
+        private GameObject FindNearestEnemy()
         {
-            Debug.Log($"[PlayerController.FireProjectile] Starting... projectilePrefab={projectilePrefab?.name ?? "NULL"}");
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            
+            if (enemies == null || enemies.Length == 0)
+            {
+                Debug.LogWarning("[PlayerController.FindNearestEnemy] No enemies found");
+                return null;
+            }
+            
+            float range = attackRange;
+            GameObject nearest = null;
+            float nearestDist = range;
+            
+            foreach (GameObject enemy in enemies)
+            {
+                if (enemy == null || !enemy.activeInHierarchy) continue;
+                
+                float dist = Vector2.Distance(transform.position, enemy.transform.position);
+                if (dist < nearestDist)
+                {
+                    nearestDist = dist;
+                    nearest = enemy;
+                }
+            }
+            
+            return nearest;
+        }
+        
+        private void FireProjectile(Vector2 targetPos)
+        {
+            Debug.Log($"[PlayerController.FireProjectile] Targeting enemy at {targetPos}");
             
             GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             projectile.name = "Projectile_" + Time.time;
             
-            Debug.Log($"[PlayerController.FireProjectile] Projectile instantiated: {projectile.name} at {transform.position}");
+            Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
             
             var rb = projectile.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                Vector2 direction = Vector2.right;
                 rb.linearVelocity = direction * projectileSpeed;
-                Debug.Log($"[PlayerController.FireProjectile] Rigidbody2D velocity set: {rb.linearVelocity}");
+                Debug.Log($"[PlayerController.FireProjectile] Bullet direction: {direction}, velocity: {rb.linearVelocity}");
             }
             else
             {
                 Debug.LogError("[PlayerController.FireProjectile] Rigidbody2D component not found on projectile!");
             }
             
-            var sr = projectile.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                Debug.Log($"[PlayerController.FireProjectile] SpriteRenderer found: enabled={sr.enabled}, color={sr.color}, sortingOrder={sr.sortingOrder}");
-            }
-            else
-            {
-                Debug.LogError("[PlayerController.FireProjectile] SpriteRenderer component not found on projectile!");
-            }
-            
-            Debug.Log($"[PlayerController.FireProjectile] ✅ Projectile fired successfully!");
+            Debug.Log($"[PlayerController.FireProjectile] ✅ Projectile fired at enemy!");
         }
 
         public bool CanFire()
