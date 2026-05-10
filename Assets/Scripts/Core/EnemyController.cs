@@ -83,9 +83,24 @@ namespace SurvivorUnity.Core
         public void TakeDamage(int amount)
         {
             hp -= amount;
+            
+            StartCoroutine(FlashRed());
+            
             if (hp <= 0)
             {
                 Die();
+            }
+        }
+        
+        private System.Collections.IEnumerator FlashRed()
+        {
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                Color originalColor = sr.color;
+                sr.color = Color.red;
+                yield return new WaitForSeconds(0.1f);
+                sr.color = originalColor;
             }
         }
         
@@ -128,6 +143,10 @@ namespace SurvivorUnity.Core
                     if (ProjectilePool.Instance != null)
                     {
                         ProjectilePool.Instance.ReturnProjectile(other.gameObject);
+                    }
+                    else
+                    {
+                        Destroy(other.gameObject);
                     }
                 }
             }

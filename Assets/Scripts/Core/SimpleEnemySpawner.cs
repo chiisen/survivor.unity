@@ -13,7 +13,7 @@ namespace SurvivorUnity.Core
         
         [Header("Enemy Stats")]
         public float normalSpeed = 2f;
-        public int normalHP = 10;
+        public int normalHP = 1;
         public int normalDamage = 10;
         public int normalExpValue = 5;
         
