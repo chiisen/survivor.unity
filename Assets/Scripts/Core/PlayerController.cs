@@ -73,9 +73,14 @@ private void Awake()
             sr.sortingOrder = 1;
             
             float diameter = attackRange * 2;
-            rangeCircle.transform.localScale = new Vector3(diameter, diameter, 1);
             
-            Debug.Log($"[PlayerController] Attack range circle created: range={attackRange}, diameter={diameter}, scale={rangeCircle.transform.localScale}");
+            Vector3 playerScale = transform.localScale;
+            float correctedScaleX = diameter / playerScale.x;
+            float correctedScaleY = diameter / playerScale.y;
+            
+            rangeCircle.transform.localScale = new Vector3(correctedScaleX, correctedScaleY, 1);
+            
+            Debug.Log($"[PlayerController] Attack range circle created: attackRange={attackRange}, diameter={diameter}, playerScale={playerScale}, circleLocalScale={rangeCircle.transform.localScale}, actualWorldDiameter={diameter}");
         }
 
         private void Update()
