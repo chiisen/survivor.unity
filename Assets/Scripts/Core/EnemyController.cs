@@ -178,8 +178,9 @@ namespace SurvivorUnity.Core
             hpBar = new GameObject("HPBar");
             hpBar.transform.SetParent(transform);
             hpBar.transform.localPosition = new Vector3(0, 1.5f, 0);
+            hpBar.transform.localScale = new Vector3(2f, 0.3f, 1f);
             
-            SpriteRenderer renderer = hpBar.AddComponent<SpriteRenderer>();
+            hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
             
             Texture2D texture = new Texture2D(64, 16);
             Color[] colors = new Color[64 * 16];
@@ -194,20 +195,14 @@ namespace SurvivorUnity.Core
                 texture,
                 new Rect(0, 0, 64, 16),
                 new Vector2(0.5f, 0.5f),
-                16
+                64
             );
             
-            renderer.sprite = sprite;
-            renderer.color = Color.green;
-            renderer.sortingOrder = 100;
+            hpBarRenderer.sprite = sprite;
+            hpBarRenderer.color = Color.green;
+            hpBarRenderer.sortingOrder = 100;
             
-            float width = sprite.bounds.size.x;
-            float scale = 1f / width;
-            hpBar.transform.localScale = new Vector3(scale * 2f, scale * 0.3f, 1f);
-            
-            hpBarRenderer = renderer;
-            
-            Debug.Log($"[EnemyController] HPBar created: texture={texture.width}x{texture.height}, sprite={sprite.bounds.size}, scale={hpBar.transform.localScale}");
+            Debug.Log($"[EnemyController] HPBar created: localPosition={hpBar.transform.localPosition}, localScale={hpBar.transform.localScale}, worldPosition={hpBar.transform.position}");
         }
         
         private void UpdateHPBar()
@@ -231,16 +226,9 @@ namespace SurvivorUnity.Core
                 }
                 
                 hpBarRenderer.color = hpColor;
+                hpBar.transform.localScale = new Vector3(2f * hpPercent, 0.3f, 1f);
                 
-                Sprite sprite = hpBarRenderer.sprite;
-                if (sprite != null)
-                {
-                    float baseWidth = sprite.bounds.size.x;
-                    float scale = 1f / baseWidth;
-                    hpBar.transform.localScale = new Vector3(scale * 2f * hpPercent, scale * 0.3f, 1f);
-                }
-                
-                Debug.Log($"[EnemyController] HP updated: hp={hp}/{maxHP}, percent={hpPercent:P0}, color={hpColor}, scale={hpBar.transform.localScale}");
+                Debug.Log($"[EnemyController] HP updated: hp={hp}/{maxHP}, percent={hpPercent:P0}, color={hpColor}, localScale={hpBar.transform.localScale}, worldPosition={hpBar.transform.position}");
             }
         }
         
