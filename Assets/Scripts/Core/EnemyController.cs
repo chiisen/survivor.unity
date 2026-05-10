@@ -91,6 +91,8 @@ namespace SurvivorUnity.Core
         
         private void Die()
         {
+            Debug.Log($"[EnemyController.Die] Enemy dying at {transform.position}");
+            
             if (ExpOrbPool.Instance != null)
             {
                 int expValue = config != null ? config.expValue : 10;
@@ -105,15 +107,23 @@ namespace SurvivorUnity.Core
             {
                 EnemyPool.Instance.ReturnEnemy(gameObject);
             }
+            else
+            {
+                Debug.Log("[EnemyController.Die] No pool found, destroying enemy");
+                Destroy(gameObject);
+            }
         }
         
         private void OnTriggerEnter2D(Collider2D other)
         {
+            Debug.Log($"[EnemyController.OnTriggerEnter2D] Collision detected with: {other.name}, tag={other.tag}");
+            
             if (other.CompareTag("Projectile"))
             {
                 ProjectileController projectile = other.GetComponent<ProjectileController>();
                 if (projectile != null)
                 {
+                    Debug.Log($"[EnemyController.OnTriggerEnter2D] Taking damage: {projectile.Damage}");
                     TakeDamage(projectile.Damage);
                     if (ProjectilePool.Instance != null)
                     {
