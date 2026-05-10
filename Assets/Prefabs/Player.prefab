@@ -184,3 +184,6 @@ MonoBehaviour:
   expToLevel: 100
   shield: 0
   maxShield: 50
+  projectilePrefab: {fileID: 2332873070681060589, guid: 8d35bfd91b787ef43abcecb4a65db729, type: 3}
+  autoFire: 1
+  autoFireInterval: 0.5

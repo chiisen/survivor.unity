@@ -8,11 +8,39 @@ namespace SurvivorUnity.Editor
         [MenuItem("Survivor/Setup Player Shooting")]
         public static void Setup()
         {
+            var projectilePrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ProjectilePrefab.prefab");
+            
+            if (projectilePrefab == null)
+            {
+                Debug.LogError("[SetupPlayerShooting] ProjectilePrefab not found at Assets/Prefabs/ProjectilePrefab.prefab");
+                return;
+            }
+            
+            var playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
+            
+            if (playerPrefab != null)
+            {
+                var prefabController = playerPrefab.GetComponent<SurvivorUnity.Core.PlayerController>();
+                
+                if (prefabController != null)
+                {
+                    prefabController.projectilePrefab = projectilePrefab;
+                    prefabController.autoFire = true;
+                    prefabController.autoFireInterval = 0.5f;
+                    
+                    EditorUtility.SetDirty(playerPrefab);
+                    AssetDatabase.SaveAssets();
+                    
+                    Debug.Log($"[SetupPlayerShooting] ✅ Player Prefab configured successfully!");
+                    Debug.Log($"  - Projectile Prefab: {projectilePrefab.name}");
+                }
+            }
+            
             var player = GameObject.FindGameObjectWithTag("Player");
             
             if (player == null)
             {
-                Debug.LogError("[SetupPlayerShooting] Player not found! Make sure Player GameObject has 'Player' tag.");
+                Debug.LogWarning("[SetupPlayerShooting] Player not found in scene. Prefab has been updated.");
                 return;
             }
             
@@ -24,21 +52,13 @@ namespace SurvivorUnity.Editor
                 return;
             }
             
-            var projectilePrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ProjectilePrefab.prefab");
-            
-            if (projectilePrefab == null)
-            {
-                Debug.LogError("[SetupPlayerShooting] ProjectilePrefab not found at Assets/Prefabs/ProjectilePrefab.prefab");
-                return;
-            }
-            
             controller.projectilePrefab = projectilePrefab;
             controller.autoFire = true;
             controller.autoFireInterval = 0.5f;
             
             EditorUtility.SetDirty(player);
             
-            Debug.Log($"[SetupPlayerShooting] ✅ Player shooting configured successfully!");
+            Debug.Log($"[SetupPlayerShooting] ✅ Player in scene configured successfully!");
             Debug.Log($"  - Projectile Prefab: {projectilePrefab.name}");
             Debug.Log($"  - Auto Fire: {controller.autoFire}");
             Debug.Log($"  - Fire Interval: {controller.autoFireInterval}s");

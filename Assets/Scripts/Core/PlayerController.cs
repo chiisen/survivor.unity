@@ -88,10 +88,21 @@ namespace SurvivorUnity.Core
         
         private void AutoFire()
         {
-            if (!autoFire || projectilePrefab == null) return;
+            if (!autoFire)
+            {
+                Debug.LogWarning("[PlayerController.AutoFire] autoFire is disabled");
+                return;
+            }
+            
+            if (projectilePrefab == null)
+            {
+                Debug.LogError("[PlayerController.AutoFire] projectilePrefab is null! Cannot fire.");
+                return;
+            }
             
             if (Time.time >= nextFireTime)
             {
+                Debug.Log($"[PlayerController.AutoFire] Time to fire! Time.time={Time.time}, nextFireTime={nextFireTime}");
                 FireProjectile();
                 nextFireTime = Time.time + autoFireInterval;
             }
@@ -99,17 +110,36 @@ namespace SurvivorUnity.Core
         
         private void FireProjectile()
         {
+            Debug.Log($"[PlayerController.FireProjectile] Starting... projectilePrefab={projectilePrefab?.name ?? "NULL"}");
+            
             GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             projectile.name = "Projectile_" + Time.time;
+            
+            Debug.Log($"[PlayerController.FireProjectile] Projectile instantiated: {projectile.name} at {transform.position}");
             
             var rb = projectile.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 Vector2 direction = Vector2.right;
                 rb.linearVelocity = direction * projectileSpeed;
+                Debug.Log($"[PlayerController.FireProjectile] Rigidbody2D velocity set: {rb.linearVelocity}");
+            }
+            else
+            {
+                Debug.LogError("[PlayerController.FireProjectile] Rigidbody2D component not found on projectile!");
             }
             
-            Debug.Log($"[PlayerController] Fired projectile at {transform.position}");
+            var sr = projectile.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                Debug.Log($"[PlayerController.FireProjectile] SpriteRenderer found: enabled={sr.enabled}, color={sr.color}, sortingOrder={sr.sortingOrder}");
+            }
+            else
+            {
+                Debug.LogError("[PlayerController.FireProjectile] SpriteRenderer component not found on projectile!");
+            }
+            
+            Debug.Log($"[PlayerController.FireProjectile] ✅ Projectile fired successfully!");
         }
 
         public bool CanFire()
