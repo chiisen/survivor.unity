@@ -37,10 +37,45 @@ namespace SurvivorUnity.Core
 
         private Vector2 movement;
 
-        private void Awake()
+private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            CreateAttackRangeCircle();
+        }
+        
+        private void CreateAttackRangeCircle()
+        {
+            GameObject rangeCircle = new GameObject("AttackRangeCircle");
+            rangeCircle.transform.SetParent(transform, false);
+            rangeCircle.transform.localPosition = Vector3.zero;
+            
+            SpriteRenderer sr = rangeCircle.AddComponent<SpriteRenderer>();
+            
+            Texture2D texture = new Texture2D(128, 128);
+            Color[] colors = new Color[128 * 128];
+            
+            int centerX = 64, centerY = 64, radius = 60;
+            
+            for (int y = 0; y < 128; y++)
+            {
+                for (int x = 0; x < 128; x++)
+                {
+                    float dist = Mathf.Sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
+                    colors[y * 128 + x] = (dist <= radius && dist >= radius - 5) ? new Color(0.5f, 0.5f, 1f, 0.5f) : Color.clear;
+                }
+            }
+            
+            texture.SetPixels(colors);
+            texture.Apply();
+            
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f), 128);
+            sr.sprite = sprite;
+            sr.sortingOrder = 1;
+            
+            float diameter = attackRange * 2;
+            rangeCircle.transform.localScale = new Vector3(diameter, diameter, 1);
+            
+            Debug.Log($"[PlayerController] Attack range circle created: range={attackRange}, diameter={diameter}, scale={rangeCircle.transform.localScale}");
         }
 
         private void Update()
