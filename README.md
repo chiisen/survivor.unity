@@ -2,6 +2,8 @@
 
 2D Survivor 遊戲 - Unity 專案
 
+![遊戲畫面](./images/game01.png)
+
 ## MCP Unity Editor
 https://github.com/CoderGamester/mcp-unity/blob/main/README_zh-CN.md
 
