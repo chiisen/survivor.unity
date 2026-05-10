@@ -62,9 +62,10 @@ namespace SurvivorUnity.Core
         
         private void MoveTowardsPlayer()
         {
-            if (GameManager.Instance == null || GameManager.Instance.Player == null) return;
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
             
-            Vector2 direction = (GameManager.Instance.Player.transform.position - transform.position).normalized;
+            Vector2 direction = (player.transform.position - transform.position).normalized;
             
             if (enemyType == EnemyType.Ranged && config != null)
             {

@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -97,7 +97,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.15
+  m_Radius: 0.32
 --- !u!212 &2045306287194963859
 SpriteRenderer:
   serializedVersion: 2
@@ -170,18 +170,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurvivorUnity.Core.EnemyController
   enemyType: 0
-  hp: 1
-  speed: 50
-  damage: 10
-  expValue: 10
-  currentHp: 0
-  isDead: 0
-  canShoot: 0
-  shootCooldown: 2
-  currentShootCooldown: 0
-  canSplit: 0
-  isInvisible: 0
-  invisibilityAlpha: 0.3
-  isBoss: 0
-  bossPhase: 1
-  enrageThreshold: 0.5

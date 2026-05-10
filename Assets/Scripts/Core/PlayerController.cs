@@ -25,6 +25,12 @@ namespace SurvivorUnity.Core
         [SerializeField] private int shield = 0;
         [SerializeField] private int maxShield = 50;
 
+        [Header("Shooting")]
+        public GameObject projectilePrefab;
+        public bool autoFire = true;
+        public float autoFireInterval = 0.5f;
+        private float nextFireTime = 0f;
+        
         [Header("Components")]
         private Rigidbody2D rb;
         private SpriteRenderer spriteRenderer;
@@ -41,6 +47,7 @@ namespace SurvivorUnity.Core
         {
             HandleInput();
             UpdateCooldown();
+            AutoFire();
         }
 
         private void FixedUpdate()
@@ -77,6 +84,32 @@ namespace SurvivorUnity.Core
             {
                 fireCooldown -= Time.deltaTime;
             }
+        }
+        
+        private void AutoFire()
+        {
+            if (!autoFire || projectilePrefab == null) return;
+            
+            if (Time.time >= nextFireTime)
+            {
+                FireProjectile();
+                nextFireTime = Time.time + autoFireInterval;
+            }
+        }
+        
+        private void FireProjectile()
+        {
+            GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            projectile.name = "Projectile_" + Time.time;
+            
+            var rb = projectile.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                Vector2 direction = Vector2.right;
+                rb.linearVelocity = direction * projectileSpeed;
+            }
+            
+            Debug.Log($"[PlayerController] Fired projectile at {transform.position}");
         }
 
         public bool CanFire()
