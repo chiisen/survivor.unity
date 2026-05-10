@@ -12,7 +12,7 @@ namespace SurvivorUnity.Core
         [SerializeField] private float attackRange = 300f;
         [SerializeField] private float fireRate = 0.5f;
         [SerializeField] private int damage = 1;
-        [SerializeField] private float projectileSpeed = 400f;
+        [SerializeField] private float projectileSpeed = 20f;
         [SerializeField] private int projectileCount = 3;
 
         [Header("Player State")]
