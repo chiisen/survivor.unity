@@ -176,7 +176,7 @@ namespace SurvivorUnity.Core
         private void CreateHPBar()
         {
             hpBar = new GameObject("HPBar");
-            hpBar.transform.SetParent(transform);
+            hpBar.transform.SetParent(transform, false);
             hpBar.transform.localPosition = new Vector3(0, 1.5f, 0);
             hpBar.transform.localScale = new Vector3(2f, 0.3f, 1f);
             
@@ -202,7 +202,7 @@ namespace SurvivorUnity.Core
             hpBarRenderer.color = Color.green;
             hpBarRenderer.sortingOrder = 100;
             
-            Debug.Log($"[EnemyController] HPBar created: localPosition={hpBar.transform.localPosition}, localScale={hpBar.transform.localScale}, worldPosition={hpBar.transform.position}");
+            Debug.Log($"[EnemyController] HPBar created: Enemy.position={transform.position}, HPBar.localPosition={hpBar.transform.localPosition}, HPBar.worldPosition={hpBar.transform.position}");
         }
         
         private void UpdateHPBar()
