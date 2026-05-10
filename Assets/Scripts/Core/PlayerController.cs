@@ -149,15 +149,24 @@ namespace SurvivorUnity.Core
             
             Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
             
-            var rb = projectile.GetComponent<Rigidbody2D>();
-            if (rb != null)
+            var projectileCtrl = projectile.GetComponent<ProjectileController>();
+            if (projectileCtrl != null)
             {
-                rb.linearVelocity = direction * projectileSpeed;
-                Debug.Log($"[PlayerController.FireProjectile] Bullet direction: {direction}, velocity: {rb.linearVelocity}");
+                projectileCtrl.Initialize(direction, projectileSpeed, damage);
+                Debug.Log($"[PlayerController.FireProjectile] ProjectileController initialized: direction={direction}, speed={projectileSpeed}, damage={damage}");
             }
             else
             {
-                Debug.LogError("[PlayerController.FireProjectile] Rigidbody2D component not found on projectile!");
+                var rb = projectile.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = direction * projectileSpeed;
+                    Debug.Log($"[PlayerController.FireProjectile] Rigidbody2D velocity set: {rb.linearVelocity}");
+                }
+                else
+                {
+                    Debug.LogError("[PlayerController.FireProjectile] Rigidbody2D component not found on projectile!");
+                }
             }
             
             Debug.Log($"[PlayerController.FireProjectile] ✅ Projectile fired at enemy!");
