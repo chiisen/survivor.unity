@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deca5dea262ec884992ea2647bbeedd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurvivorUnity.Core.ProjectileController
-  speed: 8
+  speed: 3
   damage: 1
   lifetime: 5
   isCrit: 0

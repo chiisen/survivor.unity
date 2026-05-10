@@ -12,7 +12,7 @@ namespace SurvivorUnity.Core
         [SerializeField] private float attackRange = 300f;
         [SerializeField] private float fireRate = 0.5f;
         [SerializeField] private int damage = 1;
-        [SerializeField] private float projectileSpeed = 8f;
+        [SerializeField] private float projectileSpeed = 3f;
         [SerializeField] private int projectileCount = 3;
 
         [Header("Player State")]
@@ -157,16 +157,7 @@ namespace SurvivorUnity.Core
             }
             else
             {
-                var rb = projectile.GetComponent<Rigidbody2D>();
-                if (rb != null)
-                {
-                    rb.linearVelocity = direction * projectileSpeed;
-                    Debug.Log($"[PlayerController.FireProjectile] Rigidbody2D velocity set: {rb.linearVelocity}");
-                }
-                else
-                {
-                    Debug.LogError("[PlayerController.FireProjectile] Rigidbody2D component not found on projectile!");
-                }
+                Debug.LogError("[PlayerController.FireProjectile] ProjectileController not found!");
             }
             
             Debug.Log($"[PlayerController.FireProjectile] ✅ Projectile fired at enemy!");
