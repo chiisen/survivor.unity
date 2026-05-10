@@ -177,8 +177,8 @@ namespace SurvivorUnity.Core
         {
             hpBar = new GameObject("HPBar");
             hpBar.transform.SetParent(transform, false);
-            hpBar.transform.localPosition = new Vector3(0, 1.5f, 0);
-            hpBar.transform.localScale = new Vector3(2f, 0.3f, 1f);
+            hpBar.transform.localPosition = new Vector3(0, 0.3f, 0);
+            hpBar.transform.localScale = new Vector3(0.5f, 0.08f, 1f);
             
             hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
             
@@ -202,7 +202,7 @@ namespace SurvivorUnity.Core
             hpBarRenderer.color = Color.green;
             hpBarRenderer.sortingOrder = 100;
             
-            Debug.Log($"[EnemyController] HPBar created: Enemy.position={transform.position}, HPBar.localPosition={hpBar.transform.localPosition}, HPBar.worldPosition={hpBar.transform.position}");
+            Debug.Log($"[EnemyController] HPBar created: Enemy.position={transform.position}, HPBar.localPosition={hpBar.transform.localPosition}, HPBar.localScale={hpBar.transform.localScale}, HPBar.worldPosition={hpBar.transform.position}");
         }
         
         private void UpdateHPBar()
@@ -226,7 +226,7 @@ namespace SurvivorUnity.Core
                 }
                 
                 hpBarRenderer.color = hpColor;
-                hpBar.transform.localScale = new Vector3(2f * hpPercent, 0.3f, 1f);
+                hpBar.transform.localScale = new Vector3(0.5f * hpPercent, 0.08f, 1f);
                 
                 Debug.Log($"[EnemyController] HP updated: hp={hp}/{maxHP}, percent={hpPercent:P0}, color={hpColor}, localScale={hpBar.transform.localScale}, worldPosition={hpBar.transform.position}");
             }
