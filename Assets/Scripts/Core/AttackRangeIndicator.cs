@@ -8,6 +8,17 @@ namespace SurvivorUnity.Core
         private GameObject rangeCircle;
         private SpriteRenderer spriteRenderer;
         
+        [RuntimeInitializeOnLoadMethod]
+        private static void AutoAddToPlayer()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null && player.GetComponent<AttackRangeIndicator>() == null)
+            {
+                player.AddComponent<AttackRangeIndicator>();
+                Debug.Log("[AttackRangeIndicator] Auto-added to Player");
+            }
+        }
+        
         private void Start()
         {
             playerController = GetComponent<PlayerController>();
