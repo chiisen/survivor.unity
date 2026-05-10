@@ -178,22 +178,36 @@ namespace SurvivorUnity.Core
             hpBar = new GameObject("HPBar");
             hpBar.transform.SetParent(transform);
             hpBar.transform.localPosition = new Vector3(0, 1.5f, 0);
-            hpBar.transform.localScale = new Vector3(2f, 0.3f, 1f);
             
-            hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
+            SpriteRenderer renderer = hpBar.AddComponent<SpriteRenderer>();
             
-            Sprite circleSprite = Sprite.Create(
-                Texture2D.whiteTexture,
-                new Rect(0, 0, 1, 1),
-                new Vector2(0.5f, 0.5f)
+            Texture2D texture = new Texture2D(64, 16);
+            Color[] colors = new Color[64 * 16];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = Color.white;
+            }
+            texture.SetPixels(colors);
+            texture.Apply();
+            
+            Sprite sprite = Sprite.Create(
+                texture,
+                new Rect(0, 0, 64, 16),
+                new Vector2(0.5f, 0.5f),
+                16
             );
             
-            hpBarRenderer.sprite = circleSprite;
-            hpBarRenderer.color = Color.green;
-            hpBarRenderer.sortingOrder = 100;
-            hpBarRenderer.sortingLayerID = 0;
+            renderer.sprite = sprite;
+            renderer.color = Color.green;
+            renderer.sortingOrder = 100;
             
-            Debug.Log($"[EnemyController] HPBar created for {gameObject.name}, scale={hpBar.transform.localScale}, color={hpBarRenderer.color}, position={hpBar.transform.localPosition}");
+            float width = sprite.bounds.size.x;
+            float scale = 1f / width;
+            hpBar.transform.localScale = new Vector3(scale * 2f, scale * 0.3f, 1f);
+            
+            hpBarRenderer = renderer;
+            
+            Debug.Log($"[EnemyController] HPBar created: texture={texture.width}x{texture.height}, sprite={sprite.bounds.size}, scale={hpBar.transform.localScale}");
         }
         
         private void UpdateHPBar()
@@ -201,25 +215,32 @@ namespace SurvivorUnity.Core
             if (hpBar != null && maxHP > 0)
             {
                 float hpPercent = (float)hp / maxHP;
-                hpBar.transform.localScale = new Vector3(2f * hpPercent, 0.3f, 1f);
                 
                 Color hpColor;
                 if (hpPercent <= 0.3f)
                 {
-                    hpColor = new Color(1f, 0f, 0f); // 红色
+                    hpColor = new Color(1f, 0f, 0f);
                 }
                 else if (hpPercent <= 0.6f)
                 {
-                    hpColor = new Color(1f, 0.5f, 0f); // 橙色
+                    hpColor = new Color(1f, 0.5f, 0f);
                 }
                 else
                 {
-                    hpColor = new Color(0f, 1f, 0f); // 绿色
+                    hpColor = new Color(0f, 1f, 0f);
                 }
                 
                 hpBarRenderer.color = hpColor;
                 
-                Debug.Log($"[EnemyController] HP updated: hp={hp}/{maxHP}, percent={hpPercent:P0}, scale={hpBar.transform.localScale}, color={hpColor}");
+                Sprite sprite = hpBarRenderer.sprite;
+                if (sprite != null)
+                {
+                    float baseWidth = sprite.bounds.size.x;
+                    float scale = 1f / baseWidth;
+                    hpBar.transform.localScale = new Vector3(scale * 2f * hpPercent, scale * 0.3f, 1f);
+                }
+                
+                Debug.Log($"[EnemyController] HP updated: hp={hp}/{maxHP}, percent={hpPercent:P0}, color={hpColor}, scale={hpBar.transform.localScale}");
             }
         }
         
