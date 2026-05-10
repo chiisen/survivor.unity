@@ -177,8 +177,8 @@ namespace SurvivorUnity.Core
         {
             hpBar = new GameObject("HPBar");
             hpBar.transform.SetParent(transform);
-            hpBar.transform.localPosition = new Vector3(0, 0.8f, 0);
-            hpBar.transform.localScale = new Vector3(0.5f, 0.1f, 1f);
+            hpBar.transform.localPosition = new Vector3(0, 1.2f, 0);
+            hpBar.transform.localScale = new Vector3(1f, 0.15f, 1f);
             
             hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
             
@@ -189,8 +189,11 @@ namespace SurvivorUnity.Core
             );
             
             hpBarRenderer.sprite = circleSprite;
-            hpBarRenderer.color = Color.red;
-            hpBarRenderer.sortingOrder = 30;
+            hpBarRenderer.color = Color.green;
+            hpBarRenderer.sortingOrder = 50;
+            hpBarRenderer.sortingLayerID = 0;
+            
+            Debug.Log($"[EnemyController] HPBar created for {gameObject.name}, scale={hpBar.transform.localScale}, color={hpBarRenderer.color}");
         }
         
         private void UpdateHPBar()
@@ -198,20 +201,25 @@ namespace SurvivorUnity.Core
             if (hpBar != null && maxHP > 0)
             {
                 float hpPercent = (float)hp / maxHP;
-                hpBar.transform.localScale = new Vector3(0.5f * hpPercent, 0.1f, 1f);
+                hpBar.transform.localScale = new Vector3(1f * hpPercent, 0.15f, 1f);
                 
+                Color hpColor;
                 if (hpPercent <= 0.3f)
                 {
-                    hpBarRenderer.color = new Color(1f, 0f, 0f); // 红色
+                    hpColor = new Color(1f, 0f, 0f); // 红色
                 }
                 else if (hpPercent <= 0.6f)
                 {
-                    hpBarRenderer.color = new Color(1f, 0.5f, 0f); // 橙色
+                    hpColor = new Color(1f, 0.5f, 0f); // 橙色
                 }
                 else
                 {
-                    hpBarRenderer.color = new Color(0f, 1f, 0f); // 绿色
+                    hpColor = new Color(0f, 1f, 0f); // 绿色
                 }
+                
+                hpBarRenderer.color = hpColor;
+                
+                Debug.Log($"[EnemyController] HP updated: hp={hp}/{maxHP}, percent={hpPercent:P0}, scale={hpBar.transform.localScale}, color={hpColor}");
             }
         }
         

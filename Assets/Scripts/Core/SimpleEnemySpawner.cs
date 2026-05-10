@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SurvivorUnity.Core
@@ -25,17 +26,19 @@ namespace SurvivorUnity.Core
         {
             player = GameObject.FindGameObjectWithTag("Player");
             
-            if (player == null)
-            {
-                Debug.LogError("[SimpleEnemySpawner] Player not found! Make sure Player has 'Player' tag.");
-            }
-            
             if (normalEnemyPrefab == null)
             {
                 Debug.LogError("[SimpleEnemySpawner] normalEnemyPrefab is not assigned!");
+                return;
             }
             
-            Debug.Log("[SimpleEnemySpawner] Initialized. Player found: " + (player != null));
+            if (player == null)
+            {
+                Debug.LogError("[SimpleEnemySpawner] Player not found! Make sure Player has 'Player' tag.");
+                return;
+            }
+            
+            Debug.Log($"[SimpleEnemySpawner] Initialized successfully. Player found: {player.name}, HP={normalHP}");
         }
         
         private void Update()
@@ -62,11 +65,14 @@ namespace SurvivorUnity.Core
             if (controller != null)
             {
                 controller.Initialize(player.transform.position, normalSpeed, normalHP, normalDamage);
+                Debug.Log($"[SimpleEnemySpawner] Spawned enemy at {spawnPosition}. HP={normalHP}, Speed={normalSpeed}");
+            }
+            else
+            {
+                Debug.LogError("[SimpleEnemySpawner] Enemy prefab missing EnemyController component!");
             }
             
             activeEnemies.Add(enemy);
-            
-            Debug.Log($"[SimpleEnemySpawner] Spawned enemy at {spawnPosition}. Active enemies: {activeEnemies.Count}");
         }
         
         private Vector2 GetRandomSpawnPosition()
