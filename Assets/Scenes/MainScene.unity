@@ -5491,16 +5491,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3608101507161169257, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: m_Size.x
-      value: 0.41
+      value: 0.43
       objectReference: {fileID: 0}
     - target: {fileID: 3608101507161169257, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: m_Size.y
-      value: 0.71
+      value: 0.74
       objectReference: {fileID: 0}
     - target: {fileID: 3608101507161169257, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1635758502, guid: 58b1dfc553442aa469b1b6902b9611ee, type: 3}
+      objectReference: {fileID: -598311956, guid: 7993010e65def5b49873fda758887654, type: 3}
     - target: {fileID: 3608101507161169257, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: m_Color.b
       value: 0.9803922
@@ -5558,9 +5558,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1586198018, guid: 753af183de6f3e84eb2c496bbda39b48, type: 3}
     - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteUpLeft
+      value: 
+      objectReference: {fileID: 749065371, guid: 7dea031dc8a5fdc4a82568f7f64884e9, type: 3}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteUpRight
+      value: 
+      objectReference: {fileID: -1586198018, guid: 753af183de6f3e84eb2c496bbda39b48, type: 3}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteDownLeft
+      value: 
+      objectReference: {fileID: 2145347252, guid: eb547443749a56e47a812a5f2421eea0, type: 3}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: projectileSpeed
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteDownRight
+      value: 
+      objectReference: {fileID: 770897364, guid: 5a9d5b2496055e04a95eac50ec81f421, type: 3}
     - target: {fileID: 8772441666127888310, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: m_Radius
       value: 0.08

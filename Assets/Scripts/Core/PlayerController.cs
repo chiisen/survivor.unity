@@ -47,6 +47,24 @@ namespace SurvivorUnity.Core
         public Sprite spriteDown;
         public Sprite spriteLeft;
         public Sprite spriteRight;
+        public Sprite spriteUpLeft;
+        public Sprite spriteUpRight;
+        public Sprite spriteDownLeft;
+        public Sprite spriteDownRight;
+
+        public enum SC_DIRECTION : int
+        {
+            SC_DIRECTION_1 = 1,  // Down-Left  (-1, -1)
+            SC_DIRECTION_2 = 2,  // Down       (-1, -1)
+            SC_DIRECTION_3 = 3,  // Down-Right  (+1, -1)
+            SC_DIRECTION_4 = 4,  // Left        (-1, 0)
+            SC_DIRECTION_6 = 6,  // Right       (+1, 0)
+            SC_DIRECTION_7 = 7,  // Up-Left     (-1, +1)
+            SC_DIRECTION_8 = 8,  // Up          (+1, +1)
+            SC_DIRECTION_9 = 9,  // Up-Right    (+1, 0)
+        }
+
+        private SC_DIRECTION currentDirection = SC_DIRECTION.SC_DIRECTION_6;
 
         private Vector2 movement;
 
@@ -181,30 +199,113 @@ namespace SurvivorUnity.Core
 
         private void HandleInput()
         {
-            movement.x = Input.GetAxisRaw("Horizontal");
-            movement.y = Input.GetAxisRaw("Vertical");
-            UpdateDirectionalSprite();
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+
+            movement.x = h + v;
+            movement.y = v - h;
+
+            if (movement.x != 0 || movement.y != 0)
+            {
+                movement = movement.normalized;
+                currentDirection = CaculateDirection(Vector2.zero, movement);
+                UpdateDirectionalSprite();
+            }
+        }
+
+        public static SC_DIRECTION CaculateDirection(Vector2 origin, Vector2 target)
+        {
+            float x = target.x - origin.x;
+            float y = target.y - origin.y;
+
+            if (x == 0)
+            {
+                if (y < 0)
+                    return SC_DIRECTION.SC_DIRECTION_2;
+                else
+                    return SC_DIRECTION.SC_DIRECTION_8;
+            }
+            else if (x > 0)
+            {
+                float tmp = y / x;
+                if (tmp > 4.51f)
+                    return SC_DIRECTION.SC_DIRECTION_8;
+                else if (tmp <= 4.51f && tmp > 0.414f)
+                    return SC_DIRECTION.SC_DIRECTION_9;
+                else if (tmp <= 0.414f && tmp > -0.414f)
+                    return SC_DIRECTION.SC_DIRECTION_6;
+                else if (tmp <= -0.414f && tmp > -4.51f)
+                    return SC_DIRECTION.SC_DIRECTION_3;
+                else
+                    return SC_DIRECTION.SC_DIRECTION_2;
+            }
+            else
+            {
+                float tmp = y / x;
+                if (tmp > 4.51f)
+                    return SC_DIRECTION.SC_DIRECTION_2;
+                else if (tmp <= 4.51f && tmp > 0.414f)
+                    return SC_DIRECTION.SC_DIRECTION_7;
+                else if (tmp <= 0.414f && tmp > -0.414f)
+                    return SC_DIRECTION.SC_DIRECTION_4;
+                else if (tmp <= -0.414f && tmp > -4.51f)
+                    return SC_DIRECTION.SC_DIRECTION_1;
+                else
+                    return SC_DIRECTION.SC_DIRECTION_8;
+            }
         }
 
         private void UpdateDirectionalSprite()
         {
             if (spriteRenderer == null) return;
 
-            if (movement.x > 0 && spriteRight != null)
+            Sprite newSprite = null;
+
+            switch (currentDirection)
             {
-                spriteRenderer.sprite = spriteRight;
+                case SC_DIRECTION.SC_DIRECTION_1:
+                    newSprite = spriteDownLeft;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_2:
+                    newSprite = spriteDown;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_3:
+                    newSprite = spriteDownRight;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_4:
+                    newSprite = spriteLeft;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_6:
+                    newSprite = spriteRight;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_7:
+                    newSprite = spriteUpLeft;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_8:
+                    newSprite = spriteUp;
+                    break;
+                case SC_DIRECTION.SC_DIRECTION_9:
+                    newSprite = spriteUpRight;
+                    break;
             }
-            else if (movement.x < 0 && spriteLeft != null)
+
+            if (newSprite == null)
             {
-                spriteRenderer.sprite = spriteLeft;
+                if (currentDirection == SC_DIRECTION.SC_DIRECTION_1 ||
+                    currentDirection == SC_DIRECTION.SC_DIRECTION_3)
+                    newSprite = spriteDown;
+                else if (currentDirection == SC_DIRECTION.SC_DIRECTION_7 ||
+                         currentDirection == SC_DIRECTION.SC_DIRECTION_9)
+                    newSprite = spriteUp;
+                else if (currentDirection == SC_DIRECTION.SC_DIRECTION_4)
+                    newSprite = spriteLeft;
+                else if (currentDirection == SC_DIRECTION.SC_DIRECTION_6)
+                    newSprite = spriteRight;
             }
-            else if (movement.y > 0 && spriteUp != null)
+
+            if (newSprite != null)
             {
-                spriteRenderer.sprite = spriteUp;
-            }
-            else if (movement.y < 0 && spriteDown != null)
-            {
-                spriteRenderer.sprite = spriteDown;
+                spriteRenderer.sprite = newSprite;
             }
         }
 

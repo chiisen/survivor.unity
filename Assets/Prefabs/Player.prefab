@@ -147,12 +147,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1635758502, guid: 58b1dfc553442aa469b1b6902b9611ee, type: 3}
+  m_Sprite: {fileID: -598311956, guid: 7993010e65def5b49873fda758887654, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.41, y: 0.71}
+  m_Size: {x: 0.43, y: 0.74}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -188,3 +188,11 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2332873070681060589, guid: 8d35bfd91b787ef43abcecb4a65db729, type: 3}
   autoFire: 1
   autoFireInterval: 0.5
+  spriteUp: {fileID: 749065371, guid: 7dea031dc8a5fdc4a82568f7f64884e9, type: 3}
+  spriteDown: {fileID: 770897364, guid: 5a9d5b2496055e04a95eac50ec81f421, type: 3}
+  spriteLeft: {fileID: 2145347252, guid: eb547443749a56e47a812a5f2421eea0, type: 3}
+  spriteRight: {fileID: 770897364, guid: 5a9d5b2496055e04a95eac50ec81f421, type: 3}
+  spriteUpLeft: {fileID: 749065371, guid: 7dea031dc8a5fdc4a82568f7f64884e9, type: 3}
+  spriteUpRight: {fileID: -1586198018, guid: 753af183de6f3e84eb2c496bbda39b48, type: 3}
+  spriteDownLeft: {fileID: 770897364, guid: 5a9d5b2496055e04a95eac50ec81f421, type: 3}
+  spriteDownRight: {fileID: -598311956, guid: 7993010e65def5b49873fda758887654, type: 3}
