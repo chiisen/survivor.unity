@@ -4,6 +4,10 @@ namespace SurvivorUnity.Core
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("📝 備註")]
+        [Tooltip("攻擊範圍：attackRange=300（用於判斷敵人是否在射擊範圍內）\n射擊半徑：實際射擊範圍 = attackRange * 0.5（等於視覺圈圈半徑）\n子彈冷卻：autoFireInterval=0.5秒")]
+        public string note = "射擊範圍等於視覺圈圈半徑";
+
         [Header("Player Stats")]
         [SerializeField] private int maxHP = 100;
         [SerializeField] private int currentHP = 100;
@@ -34,6 +38,9 @@ namespace SurvivorUnity.Core
         [Header("Components")]
         private Rigidbody2D rb;
         private SpriteRenderer spriteRenderer;
+        private GameObject hpBar;
+        private SpriteRenderer hpBarRenderer;
+        private int lastHP;
 
         private Vector2 movement;
 
@@ -42,7 +49,9 @@ namespace SurvivorUnity.Core
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            lastHP = maxHP;
             CreateAttackRangeCircle();
+            CreatePlayerHPBar();
         }
 
         private void CreateAttackRangeCircle()
@@ -79,11 +88,83 @@ namespace SurvivorUnity.Core
             Debug.Log($"[PlayerController] Attack range circle created: attackRange={attackRange}, diameter={diameter}");
         }
 
+        private void CreatePlayerHPBar()
+        {
+            hpBar = new GameObject("PlayerHPBar");
+            hpBar.transform.SetParent(transform, false);
+            hpBar.transform.localPosition = new Vector3(0, 0.6f, 0);
+            hpBar.transform.localScale = new Vector3(1.2f, 0.12f, 1f);
+
+            hpBarRenderer = hpBar.AddComponent<SpriteRenderer>();
+
+            Texture2D texture = new Texture2D(64, 16);
+            Color[] colors = new Color[64 * 16];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = Color.white;
+            }
+            texture.SetPixels(colors);
+            texture.Apply();
+
+            Sprite sprite = Sprite.Create(
+                texture,
+                new Rect(0, 0, 64, 16),
+                new Vector2(0.5f, 0.5f),
+                64
+            );
+
+            hpBarRenderer.sprite = sprite;
+            hpBarRenderer.color = Color.green;
+            hpBarRenderer.sortingOrder = 100;
+
+            Debug.Log($"[PlayerController] PlayerHPBar created: localPosition={hpBar.transform.localPosition}, localScale={hpBar.transform.localScale}");
+        }
+
+        private void UpdatePlayerHPBar()
+        {
+            if (hpBar != null && maxHP > 0)
+            {
+                float hpPercent = (float)currentHP / maxHP;
+
+                Color hpColor;
+                if (hpPercent <= 0.3f)
+                {
+                    hpColor = new Color(1f, 0f, 0f);
+                }
+                else if (hpPercent <= 0.6f)
+                {
+                    hpColor = new Color(1f, 0.5f, 0f);
+                }
+                else
+                {
+                    hpColor = new Color(0f, 1f, 0f);
+                }
+
+                hpBarRenderer.color = hpColor;
+                hpBar.transform.localScale = new Vector3(1.2f * hpPercent, 0.12f, 1f);
+
+                if (currentHP != lastHP)
+                {
+                    Debug.Log($"[PlayerController] HP changed: {lastHP} -> {currentHP} ({hpPercent:P0})");
+                    lastHP = currentHP;
+                }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (hpBar != null)
+            {
+                Destroy(hpBar);
+            }
+        }
+
         private void Update()
         {
             HandleInput();
             UpdateCooldown();
             AutoFire();
+            UpdatePlayerHPBar();
         }
 
         private void FixedUpdate()
@@ -151,7 +232,7 @@ namespace SurvivorUnity.Core
                 return null;
             }
             
-            float range = attackRange;
+            float range = attackRange * 0.5f;
             GameObject nearest = null;
             float nearestDist = range;
             
@@ -174,7 +255,7 @@ namespace SurvivorUnity.Core
         {
             Debug.Log($"[PlayerController.FireProjectile] Targeting enemy at {targetPos}");
             
-            GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity, transform);
             projectile.name = "Projectile_" + Time.time;
             
             Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
@@ -205,6 +286,8 @@ namespace SurvivorUnity.Core
 
         public void TakeDamage(int damage)
         {
+            if (GameManager.IsPaused) return;
+
             if (shield > 0)
             {
                 int shieldDamage = Mathf.Min(damage, shield);
@@ -213,9 +296,12 @@ namespace SurvivorUnity.Core
             }
 
             currentHP -= damage;
+            Debug.LogWarning($"[PlayerController.TakeDamage] currentHP={currentHP}, damage={damage}");
 
             if (currentHP <= 0)
             {
+                currentHP = 0;
+                Debug.LogWarning("[PlayerController.TakeDamage] HP <= 0, calling Die()");
                 Die();
             }
         }
@@ -244,7 +330,19 @@ namespace SurvivorUnity.Core
 
         private void Die()
         {
-            GameManager.Instance.GameOver();
+            Debug.LogError("[PlayerController.Die] PLAYER DIED!");
+            Debug.LogError($"[PlayerController.Die] GameManager.Instance = {GameManager.Instance}");
+
+            if (GameManager.Instance != null)
+            {
+                Debug.LogError("[PlayerController.Die] Calling GameManager.Instance.GameOver()...");
+                GameManager.Instance.GameOver();
+                Debug.LogError("[PlayerController.Die] GameOver called.");
+            }
+            else
+            {
+                Debug.LogError("[PlayerController.Die] GameManager.Instance is NULL! Cannot call GameOver!");
+            }
         }
 
         public int MaxHP => maxHP;

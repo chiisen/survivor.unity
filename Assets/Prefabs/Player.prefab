@@ -147,12 +147,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1987909707, guid: 58b1dfc553442aa469b1b6902b9611ee, type: 3}
+  m_Sprite: {fileID: 1635758502, guid: 58b1dfc553442aa469b1b6902b9611ee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.41, y: 0.71}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6ecaee680cef84d86ade72d993ec3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurvivorUnity.Core.PlayerController
+  note: "\u5C04\u64CA\u7BC4\u570D\u7B49\u65BC\u8996\u89BA\u5708\u5708\u534A\u5F91"
   maxHP: 100
   currentHP: 100
   speed: 200

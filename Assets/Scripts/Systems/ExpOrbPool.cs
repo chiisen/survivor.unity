@@ -73,7 +73,10 @@ namespace SurvivorUnity.Core
         public void ReturnOrb(GameObject orb)
         {
             if (orb == null) return;
-            
+
+            var trail = orb.GetComponent<TrailRenderer>();
+            if (trail != null) trail.Clear();
+
             orb.SetActive(false);
             pool.Enqueue(orb);
             activeOrbs.Remove(orb);

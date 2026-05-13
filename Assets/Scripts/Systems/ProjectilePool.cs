@@ -73,7 +73,10 @@ namespace SurvivorUnity.Core
         public void ReturnProjectile(GameObject projectile)
         {
             if (projectile == null) return;
-            
+
+            var trail = projectile.GetComponent<TrailRenderer>();
+            if (trail != null) trail.Clear();
+
             projectile.SetActive(false);
             pool.Enqueue(projectile);
             activeProjectiles.Remove(projectile);

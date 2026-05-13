@@ -126,11 +126,11 @@ namespace SurvivorUnity.Core
                 ExpOrbPool.Instance.SpawnExpOrb(transform.position, expValue);
             }
             
-            if (EnemyPoolManager.Instance != null)
+            if (EnemyPoolManager.Instance != null && EnemyPoolManager.Instance.enabled)
             {
                 EnemyPoolManager.Instance.ReturnEnemy(gameObject);
             }
-            else if (EnemyPool.Instance != null)
+            else if (EnemyPool.Instance != null && EnemyPool.Instance.enabled)
             {
                 EnemyPool.Instance.ReturnEnemy(gameObject);
             }

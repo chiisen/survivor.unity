@@ -5,6 +5,10 @@ namespace SurvivorUnity.Core
 {
     public class ProjectileController : MonoBehaviour
     {
+        [Header("📝 備註")]
+        [Tooltip("子彈本體：Scale=0.75（原本1.5的一半）\n尾跡寬度：TrailRenderer widthCurve 起点=0.15（原本0.3的一半）\n尾跡比例：TrailRenderer widthCurve 终点=0.025（原本0.05的一半）")]
+        public string note = "子彈小_尾跡小";
+
         private int damage;
         private Rigidbody2D rb;
         private float lifetime = 5f;
@@ -29,8 +33,8 @@ namespace SurvivorUnity.Core
             trailRenderer.widthMultiplier = 1f;
             
             AnimationCurve widthCurve = new AnimationCurve();
-            widthCurve.AddKey(0f, 0.3f);
-            widthCurve.AddKey(1f, 0.05f);
+            widthCurve.AddKey(0f, 0.15f);
+            widthCurve.AddKey(1f, 0.025f);
             trailRenderer.widthCurve = widthCurve;
             
             Gradient gradient = new Gradient();
@@ -69,13 +73,20 @@ namespace SurvivorUnity.Core
         
         private void CheckBounds()
         {
-            Vector2 pos = transform.position;
-            float maxDistance = 20f;
-            
-            if (Mathf.Abs(pos.x) > maxDistance || Mathf.Abs(pos.y) > maxDistance)
+            if (Camera.main == null) return;
+
+            Vector3 pos = transform.position;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+
+            if (screenPos.x < 0 || screenPos.x > Screen.width ||
+                screenPos.y < 0 || screenPos.y > Screen.height)
             {
-                Debug.Log($"[ProjectileController] Bullet out of bounds at {pos}, destroying");
-                ReturnToPool();
+                Debug.Log($"[ProjectileController] Bullet out of screen at {pos}, destroying");
+                if (ProjectilePool.Instance != null)
+                {
+                    ProjectilePool.Instance.ReturnProjectile(gameObject);
+                }
+                Destroy(gameObject);
             }
         }
         
