@@ -37,50 +37,46 @@ namespace SurvivorUnity.Core
 
         private Vector2 movement;
 
-private void Awake()
+        private LineRenderer lineRenderer;
+
+        private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             CreateAttackRangeCircle();
         }
-        
+
         private void CreateAttackRangeCircle()
         {
             GameObject rangeCircle = new GameObject("AttackRangeCircle");
             rangeCircle.transform.SetParent(transform, false);
             rangeCircle.transform.localPosition = Vector3.zero;
-            
-            SpriteRenderer sr = rangeCircle.AddComponent<SpriteRenderer>();
-            
-            Texture2D texture = new Texture2D(128, 128);
-            Color[] colors = new Color[128 * 128];
-            
-            int centerX = 64, centerY = 64, radius = 60;
-            
-            for (int y = 0; y < 128; y++)
+
+            lineRenderer = rangeCircle.AddComponent<LineRenderer>();
+            lineRenderer.startColor = new Color(0.5f, 0.5f, 1f, 0.5f);
+            lineRenderer.endColor = new Color(0.5f, 0.5f, 1f, 0.5f);
+            lineRenderer.startWidth = 0.01f;
+            lineRenderer.endWidth = 0.01f;
+            lineRenderer.useWorldSpace = false;
+            lineRenderer.loop = true;
+
+            float diameter = attackRange;
+            int segments = 64;
+            Vector3[] points = new Vector3[segments + 1];
+
+            for (int i = 0; i <= segments; i++)
             {
-                for (int x = 0; x < 128; x++)
-                {
-                    float dist = Mathf.Sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
-                    colors[y * 128 + x] = (dist <= radius && dist >= radius - 5) ? new Color(0.5f, 0.5f, 1f, 0.5f) : Color.clear;
-                }
+                float angle = i * 2f * Mathf.PI / segments;
+                float x = Mathf.Cos(angle) * diameter * 0.5f;
+                float y = Mathf.Sin(angle) * diameter * 0.5f;
+                points[i] = new Vector3(x, y, 0);
             }
-            
-            texture.SetPixels(colors);
-            texture.Apply();
-            
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f), 128);
-            sr.sprite = sprite;
-            sr.sortingOrder = 1;
-            
-            float diameter = attackRange * 2;
-            
-            Vector3 playerScale = transform.localScale;
-            float correctedScaleX = diameter / playerScale.x;
-            float correctedScaleY = diameter / playerScale.y;
-            
-            rangeCircle.transform.localScale = new Vector3(correctedScaleX, correctedScaleY, 1);
-            
-            Debug.Log($"[PlayerController] Attack range circle created: attackRange={attackRange}, diameter={diameter}, playerScale={playerScale}, circleLocalScale={rangeCircle.transform.localScale}, actualWorldDiameter={diameter}");
+
+            lineRenderer.positionCount = segments + 1;
+            lineRenderer.SetPositions(points);
+
+            lineRenderer.sortingOrder = 1;
+
+            Debug.Log($"[PlayerController] Attack range circle created: attackRange={attackRange}, diameter={diameter}");
         }
 
         private void Update()
@@ -99,12 +95,6 @@ private void Awake()
         {
             movement.x = Input.GetAxisRaw("Horizontal");
             movement.y = Input.GetAxisRaw("Vertical");
-
-            // 移除旋转逻辑 - 主角保持固定朝向
-            // if (movement != Vector2.zero)
-            // {
-            //     UpdateDirection();
-            // }
         }
 
         private void Move()
