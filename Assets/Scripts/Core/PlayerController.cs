@@ -42,6 +42,12 @@ namespace SurvivorUnity.Core
         private SpriteRenderer hpBarRenderer;
         private int lastHP;
 
+        [Header("Directional Sprites")]
+        public Sprite spriteUp;
+        public Sprite spriteDown;
+        public Sprite spriteLeft;
+        public Sprite spriteRight;
+
         private Vector2 movement;
 
         private LineRenderer lineRenderer;
@@ -49,6 +55,7 @@ namespace SurvivorUnity.Core
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
             lastHP = maxHP;
             CreateAttackRangeCircle();
             CreatePlayerHPBar();
@@ -176,11 +183,50 @@ namespace SurvivorUnity.Core
         {
             movement.x = Input.GetAxisRaw("Horizontal");
             movement.y = Input.GetAxisRaw("Vertical");
+            UpdateDirectionalSprite();
+        }
+
+        private void UpdateDirectionalSprite()
+        {
+            if (spriteRenderer == null) return;
+
+            if (movement.x > 0 && spriteRight != null)
+            {
+                spriteRenderer.sprite = spriteRight;
+            }
+            else if (movement.x < 0 && spriteLeft != null)
+            {
+                spriteRenderer.sprite = spriteLeft;
+            }
+            else if (movement.y > 0 && spriteUp != null)
+            {
+                spriteRenderer.sprite = spriteUp;
+            }
+            else if (movement.y < 0 && spriteDown != null)
+            {
+                spriteRenderer.sprite = spriteDown;
+            }
         }
 
         private void Move()
         {
-            rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+            Vector2 newPos = rb.position + movement * speed * Time.fixedDeltaTime;
+
+            if (Camera.main != null)
+            {
+                float halfHeight = Camera.main.orthographicSize;
+                float halfWidth = halfHeight * Camera.main.aspect;
+
+                float minX = Camera.main.transform.position.x - halfWidth + 0.5f;
+                float maxX = Camera.main.transform.position.x + halfWidth - 0.5f;
+                float minY = Camera.main.transform.position.y - halfHeight + 0.5f;
+                float maxY = Camera.main.transform.position.y + halfHeight - 0.5f;
+
+                newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
+                newPos.y = Mathf.Clamp(newPos.y, minY, maxY);
+            }
+
+            rb.MovePosition(newPos);
         }
 
         private void UpdateDirection()

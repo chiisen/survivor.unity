@@ -780,9 +780,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425621034}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1213212359}
@@ -836,7 +836,7 @@ Transform:
   - {fileID: 688537650}
   - {fileID: 1373960981}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
 --- !u!1 &437384680
 GameObject:
   m_ObjectHideFlags: 0
@@ -5538,9 +5538,25 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteUp
+      value: 
+      objectReference: {fileID: 749065371, guid: 7dea031dc8a5fdc4a82568f7f64884e9, type: 3}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteDown
+      value: 
+      objectReference: {fileID: 770897364, guid: 5a9d5b2496055e04a95eac50ec81f421, type: 3}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteLeft
+      value: 
+      objectReference: {fileID: 2145347252, guid: eb547443749a56e47a812a5f2421eea0, type: 3}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: attackRange
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
+      propertyPath: spriteRight
+      value: 
+      objectReference: {fileID: -1586198018, guid: 753af183de6f3e84eb2c496bbda39b48, type: 3}
     - target: {fileID: 5838530864824839098, guid: 6791adb18bac1484fa4c81f2ed193c61, type: 3}
       propertyPath: projectileSpeed
       value: 3
